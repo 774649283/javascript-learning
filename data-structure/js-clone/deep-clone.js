@@ -4,13 +4,10 @@
 ----------------------------------------------------------------------------- */
 
 /* ------------------- 深复制 ------------------- */
-function deepClone(tData) {
+var deepClone =  (function () {
 
-  var cloneData;
-
-  // step
+  // key step
   var step = function (data) {
-    console.log('step:', data);
     var nData;
 
     if ( Object.prototype.toString.call(data) === '[object Array]') {
@@ -23,6 +20,15 @@ function deepClone(tData) {
 
     return nData;
   }
+
+  // get reg condition
+  var getRegExp = function(re) {
+    var flags = '';
+    if (re.global) flags += 'g';
+    if (re.ignoreCase) flags += 'i';
+    if (re.multiline) flags += 'm';
+    return flags;
+  };
 
   // array clone
   var arrayClone = function (base, target) {
@@ -41,15 +47,26 @@ function deepClone(tData) {
 
   // simple clone
   var normalClone = function (target) {
+    if ( Object.prototype.toString.call(target) === '[object RegExp]' ) {
+      var reg = new RegExp(target.source, getRegExp(target));
+      target.lastIndex && (reg.lastIndex = target.lastIndex);
+
+    }else if( Object.prototype.toString.call(target) === '[object Date]' ) {
+      target = new Date(target.getTime());
+    }
+
     return target;
   };
 
-  cloneData = step(tData);
+  return function (origin) {
+    return step(origin);
+  }
 
-  return cloneData;
-}
+})();
 
 /* ------------------- TEST ------------------- */
-var a = [1, 2, {}];
+var a = [1, 2, {}, /(1|2)/gi];
 var b = deepClone(a);
-console.log('deepClone test: ', b[2] !== a[2]);
+b.map(function (item) {
+  console.log(item);
+});
