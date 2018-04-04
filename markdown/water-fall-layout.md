@@ -118,6 +118,7 @@ var waterFallInit = function (wData) {
 
   // 轮询所有图片的加载状态
   timer = setInterval(function () {
+    index=0;
     $imgs = domMap.$waterFall.querySelectorAll('.water-fall-item > img');
     length = $imgs.length;
     // 统计图片加载完成的数量
