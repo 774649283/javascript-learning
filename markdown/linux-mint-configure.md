@@ -10,7 +10,7 @@
 4. 安装 Mac-os 主题
 5. 怎样自由上网(翻墙)
 6. 安装办公软件wps
-7. 实用工具推荐：tmux、stacer、oh-my-zsh、SmartGit
+7. 实用工具推荐：tmux、stacer、oh-my-zsh、SmartGit、Docky
 8. chrome实用插件整理
 
 #### QQ 8.1 的 安装配置
@@ -108,7 +108,8 @@ sudo apt-get install shadowsocks-qt5
 4. SmartGit仓库管理可视化工具
 >大名鼎鼎的分布式版本控制软件git的可视化工具，免费又强大，只是界面是英文的，不过我想你应该不太会介意
 
-5. 编辑器就不推荐了，不过我用的Atom
+5. Docky  
+>漂亮的dock工具栏，方便酷炫实用
 
 #### chrome实用插件整理
 ---------------------
