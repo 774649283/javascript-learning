@@ -109,7 +109,13 @@ sudo apt-get install shadowsocks-qt5
 >大名鼎鼎的分布式版本控制软件git的可视化工具，免费又强大，只是界面是英文的，不过我想你应该不太会介意
 
 5. Docky  
->漂亮的dock工具栏，方便酷炫实用
+>漂亮的dock工具栏，方便酷炫实用  
+
+6. Peek
+>强大的屏幕录制工具，支持输出gif/webm/apng/webm格式的媒体文件  
+
+7. Inkscape
+>跨平台免费强大的svg图片绘制工具  
 
 #### chrome实用插件整理
 ---------------------
