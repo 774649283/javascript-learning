@@ -1,4 +1,4 @@
-/* ************************* Promise构造函数 ************************* */
+/* ************************* Promise Function ************************* */
 function Promise(processor) {
   var self = this;
   self.status = 'pending';  // status
@@ -7,7 +7,7 @@ function Promise(processor) {
   self.onRejectedCallbacks = [];  // reject callback
   self.onFulfilledCallbacks = [];  // resolve callback
 
-  // resolve
+  // resolve //
   function resolve(value) {
     if (self.status === 'pending') {
       self.status = 'fulfilled';
@@ -18,7 +18,7 @@ function Promise(processor) {
     }
   }
 
-  // reject
+  // reject //
   function reject(reason) {
     if (self.status === 'pending') {
       self.status = 'rejected';
@@ -29,7 +29,7 @@ function Promise(processor) {
     }
   }
 
-  // 延迟到下一次事件循环
+  // delay to next event loop //
   try {
     processor(resolve, reject);
   } catch (e) {
@@ -40,41 +40,36 @@ function Promise(processor) {
 }
 
 /* ------------------- 分析promise.then中返回的值类型 promise/value ------------------- */
-
-// 注意父子promise状态是怎样控制的，父promise需要将控制权(resovle, reject)转发给子promise
+/**
+ * [analysisPromise 使用递归将状态控制权转移]
+ * @param  {[Any]} x        [value]
+ * @param  {[Func]} resolve [get into success state]
+ * @param  {[Func]} reject  [get into faill state]
+ */
 var analysisPromise = function (x, resolve, reject) {
 
   var then, y;
-
-  // 可能为promise
   if (x !== undefined && (typeof x === 'object' || typeof x === 'function')) {
     then = x.then;
-
-    // 为promise
+    // obj Promise
     if (then && typeof then === 'function') {
-
       then.call(x, function (value) {
+        // callback return a promise
         analysisPromise(value, resolve, reject);
-
       }, function (error) {
         reject(error);
       });
-
-    // 为普通值
+    // normal
     }else {
       resolve(x);
     }
-
-  // 普通值
+  // normal
   }else {
     resolve(x);
   }
 };
 
-
 /* ------------------- then-返回新的promise ------------------- */
-
-
 /**
  * [then 应该返回一个全新的Promise对象，不应该与当前Promise存在功能耦合]
  * @param  {[type]} successFn [description]
@@ -85,30 +80,24 @@ Promise.prototype.then = function (successCallback, errorCallback) {
   var promise, x;
   var self = this;
 
-  // 判断当前promise状态
   if (self.status === 'fulfilled') {
     promise = new Promise(function (resolve, reject) {
-
-      // 延迟到下一个事件循环
+      // delay to next event loop
       setTimeout(function () {
         try {
           x = successCallback(self.value);
-          // 分析返回值 然后更改 当前promise状态
           analysisPromise(x, resolve, reject);
         } catch (e) {
           reject(e);
         }
       });
-
     });
   }else if (self.status === 'rejected') {
     promise = new Promise(function (resolve, reject) {
-
-      // 延迟到下一个事件循环
+      // delay to next event loop
       setTimeout(function () {
         try {
           x = errorCallback(self.reason);
-          // 分析返回值 然后更改 当前promise状态
           analysisPromise(x, resolve, reject);
         } catch (e) {
           reject(e);
@@ -141,7 +130,6 @@ Promise.prototype.then = function (successCallback, errorCallback) {
           }
         });
       })
-
     });
 
   }
@@ -201,7 +189,6 @@ Promise.race = function (pArray) {
   var promise = new Promise(function (resolve, reject) {
 
     pArray.forEach(function (pr, i) {
-
         if (pr instanceof Promise) {
           pr.then(function (value) {
             analysisPromise(value, resolve, reject);
@@ -211,9 +198,7 @@ Promise.race = function (pArray) {
         }else {
           rArray[i] = pr;
         }
-
     });
-
   });
 
   return promise;

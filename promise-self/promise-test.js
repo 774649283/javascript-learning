@@ -1,8 +1,3 @@
-/* -----------------------------------------------------------------------------
-  自定义Promise需要引入
------------------------------------------------------------------------------ */
-
-
 /* ------------------- 功能测试 ------------------- */
 var promise1 = new Promise(function (resolve, reject) {
   setTimeout(function () {
@@ -21,12 +16,11 @@ promise1.then(function (value) {
 promise1.then(function (value) {
 
   var promise = new Promise(function (resolve, reject) {
-    console.log('promise1 then new promise');
+    console.log('promise1.then => new promise');
     setTimeout(function () {
-      resolve('promise1 then new promise resolve');
+      resolve('promise1 then => new promise => resolve');
     }, 1000)
   });
-
   promise.then(function (value) {
     console.log(value);
   })
@@ -70,7 +64,7 @@ Promise.all([
 
   new Promise(function (resolve, reject) {
     setTimeout(function () {
-      reject(false);
+      resolve(false);
     }, 2000);
   }),
 
@@ -81,9 +75,9 @@ Promise.all([
   }),
 
 ]).then(function (value) {
-  console.log('all - value: ', value);
+  console.log('Promise.all - value: ', value);
 }, function (reason) {
-  console.log('all - reason: ', reason);
+  console.log('Promise.all - reason: ', reason);
 });
 
 
@@ -92,38 +86,38 @@ Promise.race(
   [
     new Promise(function (resolve, reject) {
       setTimeout(function () {
-        resolve('p1');
+        resolve('race1');
+      }, 2000);
+    }),
+
+    new Promise(function (resolve, reject) {
+      setTimeout(function () {
+        resolve('race2');
       }, 3000);
     }),
 
     new Promise(function (resolve, reject) {
       setTimeout(function () {
-        resolve('p2');
-      }, 3000);
-    }),
-
-    new Promise(function (resolve, reject) {
-      setTimeout(function () {
-        resolve('p3');
-      }, 3000);
+        reject('rece3');
+      }, 1000);
     }),
   ]
 ).then(function (value) {
-  console.log('race - value : ', value);
+  console.log('Promise.race - value : ', value);
 }, function (reason) {
-  console.log('race - reason : ', reason);
+  console.log('Promise.race - reason : ', reason);
 })
 
 
 /* ------------------- resolve/reject静态方法测试 ------------------- */
-Promise.resolve('resolve').then(function (value) {
-  console.log('Promise resolve: ', value);
+Promise.resolve(' static_resolve').then(function (value) {
+  console.log('Promise.resolve: ', value);
 }, function (reason) {
-  console.log('Promise reject: ', reason);
+  console.log('Promise.reject: ', reason);
 });
 
-Promise.reject('reject').then(function (value) {
-  console.log('Promise resolve: ', value);
+Promise.reject('static_reject').then(function (value) {
+  console.log('Promise.resolve: ', value);
 }, function (reason) {
-  console.log('Promise reject: ', reason);
-})
+  console.log('Promise.reject: ', reason);
+});
