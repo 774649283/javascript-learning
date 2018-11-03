@@ -10,6 +10,8 @@ then 方法绑定的处理方法（handlers ）就会被调用（then方法包�
 onfulfilled 方法，当Promise状态为rejected时，调用 then 的 onrejected 方法，
 所以在异步操作的完成和绑定处理方法之间不存在竞争）。  
 
+[源代码](https://github.com/NoJsJa/javascript-learning/tree/master/promise-self)
+
 #### 谈谈Promise
 ---------------
 

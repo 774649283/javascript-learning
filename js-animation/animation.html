@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Animation</title>
+    <style media="screen">
+      #animationTarget {
+        display: inline-block;
+        width: 1rem;
+        height: 1rem;
+        border: solid 1px #3c60df;
+        position: relative;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="animation-wrapper">
+      <div id="animationTarget"></div>
+    </div>
+    <script type="text/javascript" src="./animation.js"></script>
+
+    <script type="text/javascript">
+      var anime = new Animation();
+      anime.setTarget('#animationTarget');
+      anime.push('#animationTarget', {
+        x: 50,
+        y: 50,
+        duration: 1000,
+      });
+
+      anime.push('#animationTarget', {
+        x: -50,
+        y: -50,
+        duration: 1000,
+      });
+
+      anime.push('#animationTarget', {
+        x: 50,
+        y: 0,
+        duration: 1000,
+      });
+
+      anime.push('#animationTarget', {
+        x: 0,
+        y: 50,
+        duration: 1000,
+      });
+
+      anime.start('#animationTarget');
+    </script>
+
+  </body>
+</html>
