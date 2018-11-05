@@ -1,7 +1,7 @@
 ### Linux Mint18.3 日常软件安装配置
 >实装机器是linux mint18.3，理论上也适用于ubuntu
 
-![city](./city.jpg)
+![city](./resources/city.jpg)
 
 #### contents
 1. QQ 8.1 的 安装配置
