@@ -62,9 +62,9 @@
       .css('position', 'fixed')
       .css('left', renderX(rect, direction))
       .css('top', renderY(rect, direction))
-      .attr('key', randomKey)
+      .attr('tootip-key', randomKey)
       .addClass(styleSheet);
-     $selector.attr('key', randomKey);
+     $selector.attr('tootip-key', randomKey);
 
      Object.keys(cssStyle).forEach(function (attr) {
        $wrapper.css(attr, cssStyle[attr]);
@@ -85,13 +85,14 @@
 
      var $selector = (typeof _$selector === 'object') ? _$selector : $(_$selector);
      var trigger = _options['trigger'] ? _options['trigger'] : 'mouseover'; // click | hover
+     var key = $selector.attr('tootip-key');
      $selector
       .data('tootip-target', _options.value)
       .data('tootip-type', _options.type)
       .data('tootip-options', _options)
       .css('cursor', 'pointer');
 
-     eventListen($selector, trigger);
+    (!key) && eventListen($selector, trigger);
    }
 
    /**
@@ -135,8 +136,8 @@
 
      // 隐藏
      var hideTooTips = function ($selector) {
-       var key = $selector.attr('key');
-       $('div[key='+key+']').remove();
+       var key = $selector.attr('tootip-key');
+       $('div[tootip-key='+key+']').remove();
        $selector.data('isActivated', '');
      };
 
