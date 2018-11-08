@@ -7,6 +7,7 @@
   Example:
   Tootips.init($('#tootipsTest'), {
     trigger: 'mouseover' | 'click',
+    context: '' | element,
     type: 'html' | 'text',
     value: '<h3>header</h3><p>body</p>',
     direction: 'right' | 'top' | 'left' | 'bottom',
@@ -83,16 +84,17 @@
     */
    function init(_$selector, _options) {
 
-     var $selector = (typeof _$selector === 'object') ? _$selector : $(_$selector);
-     var trigger = _options['trigger'] ? _options['trigger'] : 'mouseover'; // click | hover
-     var key = $selector.attr('tootip-key');
+     var $selector = (typeof _$selector === 'object') ? _$selector : $(_$selector),
+        trigger = _options['trigger'] ? _options['trigger'] : 'mouseover', // click | hover
+        $context = _options['context'],
+        key = $selector.attr('tootip-key');
      $selector
       .data('tootip-target', _options.value)
       .data('tootip-type', _options.type)
       .data('tootip-options', _options)
       .css('cursor', 'pointer');
 
-    (!key) && eventListen($selector, trigger);
+    (!key) && eventListen($selector, trigger, $context);
    }
 
    /**
@@ -100,8 +102,9 @@
     * @param  {[$Object]} $selector [一个页面元素]
     * @param  {[String]} trigger [触发事件监听类型]
     */
-   function eventListen($selector, trigger) {
+   function eventListen($selector, _trigger, $context) {
 
+     var trigger = (_trigger instanceof Array) ? _trigger : [_trigger];
      // 显示
      var showTootips = function ($selector) {
        var $dom = renderPage($selector);
@@ -142,7 +145,7 @@
      };
 
      // click事件监听
-     (trigger === 'click') &&  $selector.on(trigger, function () {
+     (trigger.includes('click')) &&  ($context || $selector).on('click', function () {
        if (!$selector.data('isActivated')) {
          showTootips($selector);
        }else {
@@ -151,8 +154,8 @@
      });
 
      // 鼠标事件监听
-     (trigger === 'mouseover') &&
-        $selector.on('mouseout', function () {
+     (trigger.includes('mouseover')) &&
+        ($context || $selector).on('mouseout', function () {
           hideTooTips($selector);
         }).on('mouseover', function () {
           showTootips($selector);
