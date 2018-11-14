@@ -98,6 +98,79 @@
    }
 
    /**
+     * [trigger 手动触发元素的显示和隐藏]
+     * @param  {[$Object]} $selector [一个页面元素]
+     */
+    function trigger($selector) {
+      if (!$selector.data('isActivated')) {
+        showTootips($selector);
+      }else {
+        hideTooTips($selector);
+      }
+    }
+
+    /**
+     * [getStatus 获取某个元素的状态]
+     * @param  {[$Object]} $selector [一个页面元素]
+     */
+    function getStatus($selector) {
+
+      console.log($selector);
+      var status = {
+        isActivated: $selector.data('isActivated') ? true : false,
+        isInited: $selector.attr('tootip-key') ? true : false,
+        key: $selector.attr('tootip-key') || null,
+      };
+      return status;
+    }
+
+   /**
+    * [showTootips 操作页面属性显示一个元素]
+    * @param  {[$Object]} $selector [一个页面元素]
+    */
+   function showTootips($selector) {
+     var $dom = renderPage($selector);
+     $('body').append($dom[0]);
+     $selector.data('isActivated', true);
+
+     // 根据生成的tootips元素第二次计算横坐标和纵坐标
+     var options = $selector.data('tootip-options');
+     var rect = $dom[0].getBoundingClientRect();
+
+     var renderX = function (r, d) {
+       if (d === 'top' || d === 'bottom')
+         return (r.x - r.width / 2 + 'px');
+       if (d === 'left')
+         return (r.x - r.width + 'px');
+       if (d === 'right')
+         return (r.x + 'px');
+     };
+
+     var renderY = function (r, d) {
+       if (d === 'top')
+         return (r.y - r.height + 'px');
+       if (d === 'left' || d === 'right')
+         return (r.y - r.height / 2 + 'px');
+       if (d === 'bottom')
+         return (r.y + 'px');
+     };
+
+     $dom.css('top', renderY(rect, options.direction));
+     $dom.css('left', renderX(rect, options.direction));
+   };
+
+   /**
+    * [hideTooTips 操作页面属性隐藏一个元素]
+    * @param  {[$Object]} $selector [一个页面元素]
+    */
+   function hideTooTips($selector) {
+     var key = $selector.attr('tootip-key');
+     $('div[tootip-key='+key+']').remove();
+     $selector.data('isActivated', '');
+   };
+
+
+   /**
     * [eventListen 进行事件监听]
     * @param  {[$Object]} $selector [一个页面元素]
     * @param  {[String]} trigger [触发事件监听类型]
@@ -105,44 +178,6 @@
    function eventListen($selector, _trigger, $context) {
 
      var trigger = (_trigger instanceof Array) ? _trigger : [_trigger];
-     // 显示
-     var showTootips = function ($selector) {
-       var $dom = renderPage($selector);
-       $('body').append($dom[0]);
-       $selector.data('isActivated', true);
-
-       // 根据生成的tootips元素第二次计算横坐标和纵坐标
-       var options = $selector.data('tootip-options');
-       var rect = $dom[0].getBoundingClientRect();
-
-       var renderX = function (r, d) {
-         if (d === 'top' || d === 'bottom')
-           return (r.x - r.width / 2 + 'px');
-         if (d === 'left')
-           return (r.x - r.width + 'px');
-         if (d === 'right')
-           return (r.x + 'px');
-       };
-
-       var renderY = function (r, d) {
-         if (d === 'top')
-           return (r.y - r.height + 'px');
-         if (d === 'left' || d === 'right')
-           return (r.y - r.height / 2 + 'px');
-         if (d === 'bottom')
-           return (r.y + 'px');
-       };
-
-       $dom.css('top', renderY(rect, options.direction));
-       $dom.css('left', renderX(rect, options.direction));
-     };
-
-     // 隐藏
-     var hideTooTips = function ($selector) {
-       var key = $selector.attr('tootip-key');
-       $('div[tootip-key='+key+']').remove();
-       $selector.data('isActivated', '');
-     };
 
      // click事件监听
      (trigger.includes('click')) &&  ($context || $selector).on('click', function () {
@@ -164,5 +199,7 @@
 
    return {
      init: init,
+     trigger: trigger,
+     status: getStatus,
    }
  })();
