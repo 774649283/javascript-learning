@@ -4,35 +4,21 @@
 ----------------------------------------------------------------------------- */
 
 function shallowClone(data) {
+  var base;
 
-  var cloneData, i;
-
-  var arrayClone = function (base, target) {
-    for (i = 0; i < target.length; i++) {
-      base[i] =  target[i];
-    }
-  };
-
-  var objectClone = function (base, target) {
-    var keys = Object.keys(target);
-    for (i = 0; i < keys.length; i++) {
-      base[ keys[i] ] = target[ keys[i] ];
-    }
-  };
-
-  var normalClone = function (base, target) {
-    base = target;
-  };
-
-  if ( Object.prototype.toString.call(data) === '[object Array]') {
-    arrayClone(cloneData = [], data);
-  } else if (Object.prototype.toString.call(data) === '[object Object]') {
-    objectClone(cloneData = {}, data);
+  if (!data || !(typeof data === 'object')) {
+    throw new Error('argument of shallowClone must be an object!');
   } else {
-    normalClone(cloneData, data);
+    base = Object.prototype.toString.call(data) === '[object array]' ? [] : {};
   }
 
-  return cloneData;
+  for (var attr in data) {
+    if (data.hasOwnProperty(attr)) {
+      base[attr] = data[attr];
+    }
+  }
+
+  return base;
 }
 
 /* ------------------- TEST ------------------- */
